@@ -1,0 +1,19 @@
+/* 오늘의 메뉴 제목 옆 메뉴 수를 눈에 띄는 초록색 표시로 보여 줍니다. */
+.menu-title-line .count-pill {
+  min-width: 48px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  color: #315d39;
+  background: #e5f2e3;
+  border: 1px solid #cfe4cd;
+  border-radius: 9px;
+  box-shadow: 0 2px 6px rgba(49, 93, 57, 0.08);
+  font-size: 12px;
+}
+
+.menu-title-line .count-pill::after {
+  content: "개";
+}
