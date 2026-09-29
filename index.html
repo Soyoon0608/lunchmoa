@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f2">
+  <meta name="description" content="오늘의 점심 메뉴를 등록하고 목록으로 확인하는 점심모아">
+  <title>점심모아 — 오늘의 메뉴</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="menu-count.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="점심모아 홈">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M7.2 9.1c.2-1.5 1-2.6 2.1-3.3M12 8.2V4.8M14.8 9.1c-.2-1.5-1-2.6-2.1-3.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M4.2 12.1h15.6l-1.5 5.2a2.1 2.1 0 0 1-2 1.5H7.7a2.1 2.1 0 0 1-2-1.5l-1.5-5.2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M3.5 12.1a8.5 8.5 0 0 1 17 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-copy">
+          <span class="brand-name">점심모아</span>
+          <span class="brand-caption">오늘의 메뉴</span>
+        </span>
+      </a>
+      <div class="header-status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>메뉴 추천 모으기</span>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> 오늘의 점심</p>
+          <h1 id="page-title">오늘 점심,<br>뭐 먹을까요?</h1>
+          <p class="hero-description">먹고 싶은 메뉴를 등록하고, 오늘의 목록에서 확인해요.</p>
+        </div>
+        <div class="date-card" aria-label="오늘 날짜">
+          <span class="date-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="6" width="16" height="14" rx="3" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M8 4v4M16 4v4M4 10h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M8 13.5h.01M12 13.5h.01M16 13.5h.01M8 16.5h.01M12 16.5h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="date-copy">
+            <span class="date-weekday" id="today-weekday">오늘</span>
+            <time class="date-full" id="today-date" datetime="">날짜 확인 중</time>
+          </span>
+        </div>
+      </section>
+
+      <section class="content-grid" aria-label="오늘의 메뉴 등록과 목록">
+        <div class="primary-column">
+          <section class="panel composer-panel" aria-labelledby="add-menu-title">
+            <div class="section-heading">
+              <span class="section-icon add-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <div class="section-heading-copy">
+                <p class="section-kicker">MENU SUGGESTION</p>
+                <h2 id="add-menu-title">먹고 싶은 메뉴 추가</h2>
+              </div>
+              <span class="step-number" aria-hidden="true">01</span>
+            </div>
+
+            <form id="menu-form" class="menu-form" novalidate>
+              <label for="menu-input">메뉴 이름</label>
+              <div class="input-row">
+                <input
+                  id="menu-input"
+                  name="menu"
+                  type="text"
+                  maxlength="120"
+                  placeholder="예: 김치찌개, 돈가스, 마라탕"
+                  autocomplete="off"
+                  spellcheck="false"
+                  required
+                  aria-describedby="form-hint char-count form-feedback"
+                  aria-invalid="false"
+                >
+                <button class="submit-button" type="submit">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  <span>메뉴 등록</span>
+                </button>
+              </div>
+              <div class="form-meta">
+                <p id="form-hint">앞뒤 공백은 자동으로 정리돼요.</p>
+                <span class="char-counter" id="char-counter"><span id="char-count">0 / 60</span></span>
+              </div>
+              <p class="form-feedback" id="form-feedback" role="status" aria-live="polite" aria-atomic="true"></p>
+            </form>
+          </section>
+
+          <section class="panel menu-panel" aria-labelledby="menu-list-title">
+            <div class="menu-list-heading">
+              <div>
+                <div class="menu-title-line">
+                  <h2 id="menu-list-title">오늘의 메뉴</h2>
+                  <span class="count-pill" id="menu-count" aria-label="0개 메뉴">0</span>
+                </div>
+                <p class="section-description">오늘 등록한 메뉴를 최신순으로 확인해요.</p>
+              </div>
+              <span class="list-order">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M8 6h12M8 12h9M8 18h6M4 6h.01M4 12h.01M4 18h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                최신순
+              </span>
+            </div>
+
+            <ul class="menu-list" id="menu-list" aria-label="오늘 등록된 메뉴 목록" aria-live="polite" aria-relevant="additions text"></ul>
+            <div class="empty-state" id="empty-state">
+              <span class="empty-illustration" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                  <path d="M10 25h28l-2.8 9.2a3.5 3.5 0 0 1-3.4 2.5H16.2a3.5 3.5 0 0 1-3.4-2.5L10 25Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                  <path d="M7.5 25a16.5 16.5 0 0 1 33 0M17 17.5c.3-2.1 1.1-3.5 2.7-4.7M24 16v-5M31 17.5c-.3-2.1-1.1-3.5-2.7-4.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                  <path d="M18 31h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <p class="empty-title">아직 등록된 메뉴가 없어요</p>
+              <p class="empty-copy">첫 메뉴를 등록해 오늘의 점심 메뉴 목록을 시작해 보세요.</p>
+            </div>
+          </section>
+
+          <aside class="storage-note" aria-label="저장 안내">
+            <span class="storage-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="5" y="10" width="14" height="11" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <p id="storage-note-copy" role="status" aria-live="polite" aria-atomic="true"><strong id="storage-note-title">메뉴는 이 브라우저에 날짜별로 저장돼요.</strong> <span id="storage-note-description">다른 브라우저나 기기와 공유되지 않아요.</span></p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>오늘 먹고 싶은 메뉴를 모아봐요.</span>
+      <span class="footer-mark">점심모아 <span aria-hidden="true">·</span> 오늘의 메뉴</span>
+    </footer>
+  </div>
+</body>
+</html>
