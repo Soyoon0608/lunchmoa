@@ -180,12 +180,14 @@
   function updateStorageNote() {
     if (storageAvailable) {
       storageNoteTitle.textContent = '메뉴와 투표는 이 브라우저에 날짜별로 저장돼요.';
-      storageNoteDescription.textContent = '다른 브라우저나 기기와 공유되지 않아요. 공동 투표 결과는 아니에요.';
+      storageNoteDescription.textContent =
+        '다른 브라우저나 기기와 공유되지 않아요. 공동 투표 결과는 아니에요.';
       return;
     }
 
     storageNoteTitle.textContent = '브라우저 저장 공간을 사용할 수 없어요.';
-    storageNoteDescription.textContent = '현재 화면에만 임시로 유지돼요. 새로고침하면 메뉴와 투표가 사라질 수 있어요.';
+    storageNoteDescription.textContent =
+      '현재 화면에만 임시로 유지돼요. 새로고침하면 메뉴와 투표가 사라질 수 있어요.';
   }
 
   function updateCharacterCount() {
@@ -238,24 +240,30 @@
 
     const voteArea = document.createElement('div');
     voteArea.className = 'vote-area';
+
     const tally = document.createElement('span');
     tally.className = 'vote-tally';
     tally.textContent = `${menu.votes}표`;
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'vote-button';
-    button.textContent = state.votedMenuId === menu.id ? '투표 완료' : '투표';
-    button.disabled = Boolean(state.votedMenuId);
-    button.setAttribute('aria-label', `${menu.name}에 투표${state.votedMenuId === menu.id ? ' 완료' : ''}`);
-    button.addEventListener('click', () => voteFor(menu.id));
-    voteArea.append(tally, button);
+
+    const voteButton = document.createElement('button');
+    voteButton.type = 'button';
+    voteButton.className = 'vote-button';
+    voteButton.textContent = state.votedMenuId === menu.id ? '투표 완료' : '투표';
+    voteButton.disabled = Boolean(state.votedMenuId);
+    voteButton.setAttribute(
+      'aria-label',
+      `${menu.name}에 투표${state.votedMenuId === menu.id ? ' 완료' : ''}`
+    );
+    voteButton.addEventListener('click', () => voteFor(menu.id));
+
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'delete-button';
     deleteButton.textContent = '삭제';
     deleteButton.setAttribute('aria-label', `${menu.name} 메뉴 삭제`);
     deleteButton.addEventListener('click', () => deleteMenu(menu.id));
-    voteArea.append(deleteButton);
+
+    voteArea.append(tally, voteButton, deleteButton);
     item.append(number, copy, voteArea);
     return item;
   }
@@ -263,35 +271,42 @@
   function voteFor(id) {
     handleKoreanDayChange();
     if (state.votedMenuId) return;
+
     const menu = state.menus.find((entry) => entry.id === id);
     if (!menu) return;
+
     menu.votes += 1;
     state.votedMenuId = id;
     saveDailyState();
     updateStorageNote();
     renderMenus();
   }
-  const menu = state.menus.find((entry) => entry.id === id);
-  if (!menu) return;
 
-  const confirmed = window.confirm(
-    `‘${menu.name}’ 메뉴와 ${menu.votes}표를 삭제할까요? 삭제한 내용은 되돌릴 수 없어요.`
-  );
-  if (!confirmed) return;
+  function deleteMenu(id) {
+    handleKoreanDayChange();
 
-  state.menus = state.menus.filter((entry) => entry.id !== id);
-  // 삭제한 메뉴에 투표했어도 하루 한 표 제한은 유지
-  const saved = saveDailyState();
+    const menu = state.menus.find((entry) => entry.id === id);
+    if (!menu) return;
 
-  updateStorageNote();
-  renderMenus();
-  setMenuFeedback(
-    saved
-      ? `‘${menu.name}’ 메뉴를 삭제했어요.`
-      : `‘${menu.name}’ 메뉴를 화면에서 삭제했지만 저장하지 못했어요.`,
-    saved ? 'success' : 'error'
-  );
-}
+    const confirmed = window.confirm(
+      `‘${menu.name}’ 메뉴와 ${menu.votes}표를 삭제할까요? 삭제한 내용은 되돌릴 수 없어요.`
+    );
+    if (!confirmed) return;
+
+    state.menus = state.menus.filter((entry) => entry.id !== id);
+    // 투표한 메뉴를 삭제해도 하루 한 표 제한은 유지
+    const saved = saveDailyState();
+
+    updateStorageNote();
+    renderMenus();
+    setMenuFeedback(
+      saved
+        ? `‘${menu.name}’ 메뉴를 삭제했어요.`
+        : `‘${menu.name}’ 메뉴를 화면에서 삭제했지만 저장하지 못했어요.`,
+      saved ? 'success' : 'error'
+    );
+  }
+
   function renderMenus() {
     const fragment = document.createDocumentFragment();
 
@@ -305,6 +320,7 @@
     emptyState.hidden = hasMenus;
     menuCount.textContent = String(state.menus.length);
     menuCount.setAttribute('aria-label', `${state.menus.length}개 메뉴`);
+
     if (!hasMenus) {
       voteSummary.textContent = '';
     } else {
@@ -314,7 +330,10 @@
       const result = total === 0
         ? '아직 투표가 없어요.'
         : `현재 선두: ${leaders.map((menu) => menu.name).join(', ')} (${highest}표${leaders.length > 1 ? '씩, 공동 선두' : ''})`;
-      voteSummary.textContent = `${total}표 참여 · ${result} ${state.votedMenuId ? '오늘 투표를 마쳤어요.' : '오늘 한 메뉴에 투표할 수 있어요.'}`;
+
+      voteSummary.textContent =
+        `${total}표 참여 · ${result} ` +
+        `${state.votedMenuId ? '오늘 투표를 마쳤어요.' : '오늘 한 메뉴에 투표할 수 있어요.'}`;
     }
   }
 
@@ -340,7 +359,10 @@
     const nameLength = Array.from(name).length;
 
     if (!name) {
-      setMenuFeedback('메뉴 이름을 입력해 주세요.', 'error', { validation: true, invalid: true });
+      setMenuFeedback('메뉴 이름을 입력해 주세요.', 'error', {
+        validation: true,
+        invalid: true
+      });
       menuInput.focus();
       return;
     }
@@ -372,6 +394,7 @@
       createdAt: new Date().toISOString(),
       votes: 0
     };
+
     state.menus.push(menu);
     const saved = saveDailyState();
     updateStorageNote();
@@ -379,6 +402,7 @@
 
     menuInput.value = '';
     updateCharacterCount();
+
     if (saved) {
       setMenuFeedback(`‘${name}’ 메뉴를 오늘의 목록에 추가했어요.`, 'success');
     } else {
@@ -404,6 +428,7 @@
   });
   window.addEventListener('focus', handleKoreanDayChange);
   window.setInterval(handleKoreanDayChange, 60_000);
+
   window.addEventListener('storage', (event) => {
     if (event.key === dailyStorageKey(todayKey) || event.key === null) {
       state = readDailyState(todayKey);
