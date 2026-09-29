@@ -136,7 +136,10 @@
 
     return {
       menus,
-      votedMenuId: menus.some((menu) => menu.id === saved.votedMenuId) ? saved.votedMenuId : null
+      // 투표한 메뉴를 삭제해도 오늘 사용한 한 표는 유지
+      votedMenuId: typeof saved.votedMenuId === 'string' && saved.votedMenuId.trim()
+        ? saved.votedMenuId
+        : null
     };
   }
 
@@ -246,7 +249,13 @@
     button.setAttribute('aria-label', `${menu.name}에 투표${state.votedMenuId === menu.id ? ' 완료' : ''}`);
     button.addEventListener('click', () => voteFor(menu.id));
     voteArea.append(tally, button);
-
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'delete-button';
+    deleteButton.textContent = '삭제';
+    deleteButton.setAttribute('aria-label', `${menu.name} 메뉴 삭제`);
+    deleteButton.addEventListener('click', () => deleteMenu(menu.id));
+    voteArea.append(deleteButton);
     item.append(number, copy, voteArea);
     return item;
   }
@@ -262,7 +271,27 @@
     updateStorageNote();
     renderMenus();
   }
+  const menu = state.menus.find((entry) => entry.id === id);
+  if (!menu) return;
 
+  const confirmed = window.confirm(
+    `‘${menu.name}’ 메뉴와 ${menu.votes}표를 삭제할까요? 삭제한 내용은 되돌릴 수 없어요.`
+  );
+  if (!confirmed) return;
+
+  state.menus = state.menus.filter((entry) => entry.id !== id);
+  // 삭제한 메뉴에 투표했어도 하루 한 표 제한은 유지
+  const saved = saveDailyState();
+
+  updateStorageNote();
+  renderMenus();
+  setMenuFeedback(
+    saved
+      ? `‘${menu.name}’ 메뉴를 삭제했어요.`
+      : `‘${menu.name}’ 메뉴를 화면에서 삭제했지만 저장하지 못했어요.`,
+    saved ? 'success' : 'error'
+  );
+}
   function renderMenus() {
     const fragment = document.createDocumentFragment();
 
