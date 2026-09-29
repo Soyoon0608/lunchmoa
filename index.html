@@ -38,7 +38,7 @@
         <div class="hero-copy">
           <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> 오늘의 점심</p>
           <h1 id="page-title">오늘 점심,<br>뭐 먹을까요?</h1>
-          <p class="hero-description">먹고 싶은 메뉴를 등록하고, 오늘의 목록에서 확인해요.</p>
+          <p class="hero-description">먹고 싶은 메뉴를 등록하고, 한 메뉴에 투표해 봐요.</p>
         </div>
         <div class="date-card" aria-label="오늘 날짜">
           <span class="date-icon" aria-hidden="true">
@@ -108,7 +108,7 @@
                   <h2 id="menu-list-title">오늘의 메뉴</h2>
                   <span class="count-pill" id="menu-count" aria-label="0개 메뉴">0</span>
                 </div>
-                <p class="section-description">오늘 등록한 메뉴를 최신순으로 확인해요.</p>
+                <p class="section-description">오늘 등록한 메뉴에 한 표를 주세요. 목록은 최신순이에요.</p>
               </div>
               <span class="list-order">
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -118,6 +118,7 @@
               </span>
             </div>
 
+            <div class="vote-summary" id="vote-summary" role="status" aria-live="polite"></div>
             <ul class="menu-list" id="menu-list" aria-label="오늘 등록된 메뉴 목록" aria-live="polite" aria-relevant="additions text"></ul>
             <div class="empty-state" id="empty-state">
               <span class="empty-illustration" aria-hidden="true">
@@ -139,7 +140,7 @@
                 <path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <p id="storage-note-copy" role="status" aria-live="polite" aria-atomic="true"><strong id="storage-note-title">메뉴는 이 브라우저에 날짜별로 저장돼요.</strong> <span id="storage-note-description">다른 브라우저나 기기와 공유되지 않아요.</span></p>
+            <p id="storage-note-copy" role="status" aria-live="polite" aria-atomic="true"><strong id="storage-note-title">메뉴와 투표는 이 브라우저에 날짜별로 저장돼요.</strong> <span id="storage-note-description">다른 브라우저나 기기와 공유되지 않아요. 공동 투표 결과는 아니에요.</span></p>
           </aside>
         </div>
       </section>
