@@ -522,6 +522,46 @@ input:focus-visible {
   list-style: none;
 }
 
+.vote-summary {
+  margin: 0 0 14px;
+  color: #48634a;
+  font-size: 12px;
+  line-height: 1.6;
+  font-weight: 650;
+}
+
+.vote-summary:empty { display: none; }
+
+.vote-area {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: 0 0 auto;
+}
+
+.vote-tally {
+  color: #527152;
+  font-size: 12px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+.vote-button {
+  padding: 7px 12px;
+  border: 1px solid #d4e5d1;
+  border-radius: 9px;
+  background: #eaf5e8;
+  color: #315d39;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.vote-button:hover:not(:disabled) { background: #dcefd9; }
+.vote-button:focus-visible { outline: 2px solid #315d39; outline-offset: 2px; }
+.vote-button:disabled { opacity: .65; cursor: default; }
+
 .menu-list[hidden],
 .empty-state[hidden] {
   display: none !important;
@@ -839,7 +879,10 @@ input:focus-visible {
   .menu-item {
     gap: 10px;
     padding: 11px;
+    flex-wrap: wrap;
   }
+
+  .vote-area { margin-left: auto; }
 
   .menu-number {
     width: 34px;
